@@ -28,10 +28,13 @@ class Book(db.Model):
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.form:
-        book_title = Book(title=request.form.get("title"))
-        db.session.add(book_title)
-        db.session.commit()
-        print("Your book title is :", request.form.get("title"))
+        try:
+            book_title = Book(title=request.form.get("title"))
+            db.session.add(book_title)
+            db.session.commit()
+        except Exception as e:
+            print("Failed to store book due to:", e)
+
     stored_books = Book.query.all()
     return render_template("home.html", books=stored_books)
 
@@ -39,11 +42,15 @@ def home():
 @app.route("/update", methods=["POST"])
 def update():
     if request.form:
-        newtitle = request.form.get("newtitle")
-        oldtitle = request.form.get("oldtitle")
-        book = Book.query.filter_by(title=oldtitle).first()
-        book.title = newtitle
-        db.session.commit()
+        try:
+            newtitle = request.form.get("newtitle")
+            oldtitle = request.form.get("oldtitle")
+            book = Book.query.filter_by(title=oldtitle).first()
+            book.title = newtitle
+            db.session.commit()
+        except Exception as e:
+            print("Unable to updated due to:", e)
+
     return redirect("/")
 
 
