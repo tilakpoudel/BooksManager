@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>My Book Store</title>
+  </head>
+  <body>
+    <div style="text-align: center;">
+      <h1>Welcome to the Flask Book Store</h1>
+    </div>
+    <div
+      style="text-align: center; border: 1px solid black; background-color: burlywood;"
+    >
+      <h2>Add New Books</h2>
+      <form method="POST" action="/">
+        <input type="text" name="title" placeholder="Enter title" />
+        <input type="submit" value="Add" />
+      </form>
+    </div>
+
+    <div
+      style="text-align: center; border: 1px solid black; background-color: burlywood;"
+    >
+      <h3>Available Books:</h3>
+      <table
+        align="center"
+        style="border: 1px solid black; margin-bottom: 20px;"
+      >
+        <thead>
+          <tr>
+            <th>Book Title</th>
+            <th>Wanna update ?</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        {% for book in books %}
+        <tr>
+          <td>
+            {{book.title}}
+          </td>
+          <td>
+            <form method="POST" action="./update" style="display: inline">
+              <input type="hidden" value="{{book.title}}" name="oldtitle" />
+              <input type="text" value="{{book.title}}" name="newtitle" />
+              <input type="submit" value="Update" />
+            </form>
+          </td>
+          <td>
+            <form method="POST" action="./delete" style="display: inline">
+              <input type="hidden" value="{{book.title}}" name="title" />
+              <input type="submit" value="Delete" />
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </body>
+</html>
