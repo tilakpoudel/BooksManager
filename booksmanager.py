@@ -1,4 +1,5 @@
 import os
+import csv
 
 from flask import Flask
 from flask import render_template
@@ -27,16 +28,29 @@ class Book(db.Model):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    if request.form:
-        try:
-            book_title = Book(title=request.form.get("title"))
-            db.session.add(book_title)
-            db.session.commit()
-        except Exception as e:
-            print("Failed to store book due to:", e)
-
     stored_books = Book.query.all()
     return render_template("home.html", books=stored_books)
+
+
+@app.route("/store", methods=["POST"])
+def store():
+    if request.form:
+        book = request.form.get("title")
+        author = request.form.get("author")
+        if not book or not author:
+            return render_template("failure.html")
+        # store book in database_file
+        book_title = Book(title=book)
+        db.session.add(book_title)
+        db.session.commit()
+        # store books in csv file
+        file = open("books.csv", "a")
+        writer = csv.writer(file)
+        writer.writerow((book, author))
+        file.close()
+        # get all stored books
+        stored_books = Book.query.all()
+        return render_template("home.html", books=stored_books)
 
 
 @app.route("/update", methods=["POST"])
@@ -61,6 +75,14 @@ def delete():
     db.session.delete(book)
     db.session.commit()
     return redirect("/")
+
+
+@app.route("/books")
+def read_books():
+    with open("books.csv", "r") as file:
+        reader = csv.reader(file)
+        books = list(reader)
+    return render_template("view_books.html", books=books)
 
 
 if __name__ == "__main__":

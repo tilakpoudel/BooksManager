@@ -1,0 +1,7 @@
+{% extends "layouts.html" %} {% block body %}
+<ul>
+  {% for book in books %}
+  <li>{{book}}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
