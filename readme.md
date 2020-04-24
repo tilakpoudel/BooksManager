@@ -2,7 +2,7 @@
 This repository contains CRDU operation done in flask.
 
 # Guidelines:
-1. clone the project using: git clone https://github.com/tilakpoudel/FlaskCRUD.git
+1. clone the project using: git clone https://github.com/tilakpoudel/BooksManager.git
 2. install flask in your system : sudo apt-install python3-flask
 3. Export the application using (in terminal):$ export FLASK_APP=booksmanager.py
 4. Set the development ennviroment:$ export FLASK_ENV=development
